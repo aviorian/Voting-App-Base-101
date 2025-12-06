@@ -9,15 +9,19 @@ import { baseAccount, coinbaseWallet } from "wagmi/connectors";
 
 const config = createConfig({
   chains: [baseSepolia],
-  connectors: [
-   baseAccount(),
-  ],
+  connectors: [baseAccount()],
   transports: {
     [baseSepolia.id]: http(),
   },
 });
 
-export function Providers({ children, initialState }: { children: ReactNode; initialState?: State }) {
+export function Providers({
+  children,
+  initialState,
+}: {
+  children: ReactNode;
+  initialState?: State;
+}) {
   const [queryClient] = useState(() => new QueryClient());
 
   return (
@@ -26,7 +30,11 @@ export function Providers({ children, initialState }: { children: ReactNode; ini
         <OnchainKitProvider
           apiKey={process.env.NEXT_PUBLIC_ONCHAINKIT_API_KEY}
           chain={baseSepolia}
-          miniKit={{enabled: true}}
+          miniKit={{
+            enabled: true,
+            autoConnect: true,
+            notificationProxyUrl: undefined,
+          }}
           config={{
             appearance: {
               mode: "auto",
