@@ -1,8 +1,5 @@
 "use client";
-import { 
-  Transaction, TransactionButton, TransactionStatus, 
-  TransactionStatusLabel, TransactionStatusAction 
-} from '@coinbase/onchainkit/transaction';
+import TransactionWrapper from './TransactionWrapper';
 import { CONTRACT_ADDRESS, CONTRACT_ABI } from '../lib/contract';
 import { useMiniKit, useViewProfile } from "@coinbase/onchainkit/minikit";
 import { User } from 'lucide-react';
@@ -77,43 +74,27 @@ export default function PollCard({ poll, pollId, hasVoted = false }: PollCardPro
           </div>
         ) : (
           <>
-            <Transaction 
-              chainId={84532} 
-              calls={[{
-                address: CONTRACT_ADDRESS as `0x${string}`,
-                abi: CONTRACT_ABI,
-                functionName: 'vote',
-                args: [BigInt(pollId), true, BigInt(context?.user?.fid ?? 0)],
-              }]} 
-            >
-              <TransactionButton 
-                text="Vote Yes" 
-                className="w-full bg-white border border-green-500 text-green-600 hover:bg-green-50 font-bold py-2 rounded-xl transition-colors" 
-              />
-              <TransactionStatus>
-                <TransactionStatusLabel />
-                <TransactionStatusAction />
-              </TransactionStatus>
-            </Transaction>
+            <TransactionWrapper
+              mode="global"
+              chainId={84532}
+              contractAddress={CONTRACT_ADDRESS as `0x${string}`}
+              abi={CONTRACT_ABI}
+              functionName="vote"
+              args={[BigInt(pollId), true, BigInt(context?.user?.fid ?? 0)]}
+              label="Vote Yes"
+              className="w-full bg-white border border-green-500 text-green-600 hover:bg-green-50 font-bold py-2 rounded-xl transition-colors"
+            />
 
-            <Transaction 
-              chainId={84532} 
-              calls={[{
-                address: CONTRACT_ADDRESS as `0x${string}`,
-                abi: CONTRACT_ABI,
-                functionName: 'vote',
-                args: [BigInt(pollId), false, BigInt(context?.user?.fid ?? 0)],
-              }]} 
-            >
-              <TransactionButton 
-                text="Vote No" 
-                className="w-full bg-white border border-red-500 text-red-600 hover:bg-red-50 font-bold py-2 rounded-xl transition-colors" 
-              />
-              <TransactionStatus>
-                <TransactionStatusLabel />
-                <TransactionStatusAction />
-              </TransactionStatus>
-            </Transaction>
+            <TransactionWrapper
+              mode="global"
+              chainId={84532}
+              contractAddress={CONTRACT_ADDRESS as `0x${string}`}
+              abi={CONTRACT_ABI}
+              functionName="vote"
+              args={[BigInt(pollId), false, BigInt(context?.user?.fid ?? 0)]}
+              label="Vote No"
+              className="w-full bg-white border border-red-500 text-red-600 hover:bg-red-50 font-bold py-2 rounded-xl transition-colors"
+            />
           </>
         )}
       </div>
