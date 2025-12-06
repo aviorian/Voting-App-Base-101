@@ -6,11 +6,11 @@ import { base, baseSepolia } from "wagmi/chains";
 import { type ReactNode, useState } from "react";
 import { type State, WagmiProvider, createConfig, http } from "wagmi";
 import { baseAccount, coinbaseWallet } from "wagmi/connectors";
-import { farcasterFrame } from "@farcaster/frame-wagmi-connector";
+import { farcasterMiniApp } from "@farcaster/miniapp-wagmi-connector";
 
 const config = createConfig({
   chains: [baseSepolia],
-  connectors: [farcasterFrame() ,baseAccount(), coinbaseWallet({appName: "Vote For Fun"})],
+  connectors: [farcasterMiniApp(), baseAccount(), coinbaseWallet({appName: "Vote For Fun"})],
   transports: {
     [baseSepolia.id]: http(),
   },

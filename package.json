@@ -10,8 +10,8 @@
   },
   "dependencies": {
     "@coinbase/onchainkit": "latest",
-    "@farcaster/frame-wagmi-connector": "^1.0.0",
-    "@farcaster/miniapp-sdk": "^0.1.8",
+    "@farcaster/miniapp-sdk": "^0.2.1",
+    "@farcaster/miniapp-wagmi-connector": "^1.1.0",
     "@tanstack/react-query": "^5.90.12",
     "clsx": "^2.1.1",
     "lucide-react": "^0.556.0",
