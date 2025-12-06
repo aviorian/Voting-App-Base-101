@@ -4,7 +4,8 @@ import {
   TransactionStatusLabel, TransactionStatusAction 
 } from '@coinbase/onchainkit/transaction';
 import { CONTRACT_ADDRESS, CONTRACT_ABI } from '../lib/contract';
-import { useMiniKit } from "@coinbase/onchainkit/minikit";
+import { useMiniKit, useViewProfile } from "@coinbase/onchainkit/minikit";
+import { User } from 'lucide-react';
 
 interface Poll {
   title: string;
@@ -23,6 +24,11 @@ interface PollCardProps {
 
 export default function PollCard({ poll, pollId, hasVoted = false }: PollCardProps) {
   const { context } = useMiniKit();
+  const viewProfile = useViewProfile();
+
+  const handleViewProfile = () => {
+    viewProfile(Number(poll.creatorFid));
+  };
 
   const yesVotes = Number(poll.yesVotes);
   const noVotes = Number(poll.noVotes);
@@ -34,9 +40,13 @@ export default function PollCard({ poll, pollId, hasVoted = false }: PollCardPro
       <div className="flex justify-between items-start mb-3">
         <h3 className="text-lg font-bold leading-tight text-gray-900">{poll.title}</h3>
         <div className="flex flex-col items-end gap-1">
-          <span className="text-xs bg-blue-50 text-blue-600 px-2 py-1 rounded-full font-medium whitespace-nowrap ml-2">
-            FID: {poll.creatorFid.toString()}
-          </span>
+          <button 
+            onClick={handleViewProfile}
+            className="flex items-center gap-1 text-xs bg-blue-50 text-blue-600 px-2 py-1 rounded-full font-medium whitespace-nowrap ml-2 hover:bg-blue-100 hover:text-blue-700 transition-colors cursor-pointer"
+          >
+            <User size={12} />
+            <span>FID: {poll.creatorFid.toString()}</span>
+          </button>
           {hasVoted && (
             <span className="text-[10px] bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-medium">
               Voted
