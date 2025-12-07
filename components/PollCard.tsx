@@ -19,15 +19,17 @@ interface PollCardProps {
   poll: Poll;
   pollId: number;
   hasVoted?: boolean;
+  onVoteSuccess?: () => void;
 }
 
-export default function PollCard({ poll, pollId, hasVoted = false }: PollCardProps) {
+export default function PollCard({ poll, pollId, hasVoted = false, onVoteSuccess }: PollCardProps) {
   const { context } = useMiniKit();
 
   const yesVotes = Number(poll.yesVotes);
   const noVotes = Number(poll.noVotes);
   const totalVotes = yesVotes + noVotes;
   const yesPercentage = totalVotes > 0 ? (yesVotes / totalVotes) * 100 : 0;
+  const noPercentage = totalVotes > 0 ? (noVotes / totalVotes) * 100 : 0;
 
   return (
     <div className={`p-6 border rounded-2xl shadow-sm bg-white mb-4 ${hasVoted ? 'border-blue-200 bg-blue-50/30' : 'border-gray-100'}`}>
@@ -51,13 +53,17 @@ export default function PollCard({ poll, pollId, hasVoted = false }: PollCardPro
       
       <div className="mb-6 space-y-2">
         <div className="flex justify-between text-sm font-medium">
-          <span className="text-green-600">{yesVotes} Yes</span>
-          <span className="text-red-600">{noVotes} No</span>
+          <span className="text-green-600">{yesVotes} Yes ({Math.round(yesPercentage)}%)</span>
+          <span className="text-red-600">{noVotes} No ({Math.round(noPercentage)}%)</span>
         </div>
-        <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+        <div className="h-3 bg-gray-100 rounded-full overflow-hidden flex">
           <div 
-            className="h-full bg-green-500 rounded-full transition-all duration-500"
+            className="h-full bg-green-500 transition-all duration-500"
             style={{ width: `${yesPercentage}%` }}
+          />
+          <div 
+            className="h-full bg-red-500 transition-all duration-500"
+            style={{ width: `${noPercentage}%` }}
           />
         </div>
       </div>
@@ -77,6 +83,7 @@ export default function PollCard({ poll, pollId, hasVoted = false }: PollCardPro
               functionName="vote"
               args={[BigInt(pollId), true, BigInt(context?.user?.fid ?? 0)]}
               label="Vote Yes"
+              onSuccess={onVoteSuccess}
               className="w-full bg-white border border-green-500 text-green-600 hover:bg-green-50 font-bold py-2 rounded-xl transition-colors"
             />
 
@@ -88,6 +95,7 @@ export default function PollCard({ poll, pollId, hasVoted = false }: PollCardPro
               functionName="vote"
               args={[BigInt(pollId), false, BigInt(context?.user?.fid ?? 0)]}
               label="Vote No"
+              onSuccess={onVoteSuccess}
               className="w-full bg-white border border-red-500 text-red-600 hover:bg-red-50 font-bold py-2 rounded-xl transition-colors"
             />
           </>

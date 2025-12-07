@@ -11,14 +11,14 @@ export default function PollList() {
   const userFid = context?.user?.fid ? BigInt(context.user.fid) : BigInt(0);
 
   // Fetch all polls
-  const { data: pollsData, isLoading: isPollsLoading } = useReadContract({
+  const { data: pollsData, isLoading: isPollsLoading, refetch: refetchPolls } = useReadContract({
     address: CONTRACT_ADDRESS as `0x${string}`,
     abi: CONTRACT_ABI,
     functionName: "getAllPolls",
   });
 
   // Fetch user voted status
-  const { data: votedStatus, isLoading: isVotedStatusLoading } = useReadContract({
+  const { data: votedStatus, isLoading: isVotedStatusLoading, refetch: refetchVotedStatus } = useReadContract({
     address: CONTRACT_ADDRESS as `0x${string}`,
     abi: CONTRACT_ABI,
     functionName: "getUserVotedStatus",
@@ -27,6 +27,11 @@ export default function PollList() {
       enabled: !!userFid,
     },
   });
+
+  const handleVoteSuccess = () => {
+    refetchPolls();
+    refetchVotedStatus();
+  };
 
   if (isPollsLoading || isVotedStatusLoading) {
     return (
@@ -63,6 +68,7 @@ export default function PollList() {
             poll={poll}
             pollId={originalIndex}
             hasVoted={hasVoted[originalIndex] || false}
+            onVoteSuccess={handleVoteSuccess}
           />
         );
       })}
