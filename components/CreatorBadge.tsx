@@ -84,11 +84,17 @@ export default function CreatorBadge({ fid }: CreatorBadgeProps) {
       onClick={handleClick}
       className="flex items-center gap-2 bg-blue-50 hover:bg-blue-100 px-3 py-1 rounded-full transition-colors border border-blue-100 group"
     >
-      <img 
-        src={user.pfp_url} 
-        alt={user.username} 
-        className="w-5 h-5 rounded-full object-cover"
-      />
+      {user.pfp_url ? (
+        <img 
+          src={user.pfp_url} 
+          alt={user.username} 
+          className="w-5 h-5 rounded-full object-cover"
+        />
+      ) : (
+        <div className="w-5 h-5 rounded-full bg-white flex items-center justify-center border border-blue-200">
+          <User size={12} className="text-blue-400" />
+        </div>
+      )}
       <span className="text-xs font-medium text-blue-700 group-hover:text-blue-800">@{user.username}</span>
     </button>
   );
