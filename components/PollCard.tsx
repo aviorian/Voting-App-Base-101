@@ -1,8 +1,10 @@
 "use client";
 import TransactionWrapper from './TransactionWrapper';
 import { CONTRACT_ADDRESS, CONTRACT_ABI } from '../lib/contract';
-import { useMiniKit, useViewProfile } from "@coinbase/onchainkit/minikit";
-import { User } from 'lucide-react';
+import { useMiniKit } from "@coinbase/onchainkit/minikit";
+import { Avatar, Name, Identity } from '@coinbase/onchainkit/identity';
+import { base, baseSepolia } from 'wagmi/chains';
+import ShareButton from './ShareButton';
 
 interface Poll {
   title: string;
@@ -10,6 +12,7 @@ interface Poll {
   yesVotes: bigint;
   noVotes: bigint;
   creatorFid: bigint;
+  creatorAddress: `0x${string}`;
   isOpen: boolean;
 }
 
@@ -21,11 +24,6 @@ interface PollCardProps {
 
 export default function PollCard({ poll, pollId, hasVoted = false }: PollCardProps) {
   const { context } = useMiniKit();
-  const viewProfile = useViewProfile();
-
-  const handleViewProfile = () => {
-    viewProfile(Number(poll.creatorFid));
-  };
 
   const yesVotes = Number(poll.yesVotes);
   const noVotes = Number(poll.noVotes);
@@ -35,15 +33,20 @@ export default function PollCard({ poll, pollId, hasVoted = false }: PollCardPro
   return (
     <div className={`p-6 border rounded-2xl shadow-sm bg-white mb-4 ${hasVoted ? 'border-blue-200 bg-blue-50/30' : 'border-gray-100'}`}>
       <div className="flex justify-between items-start mb-3">
-        <h3 className="text-lg font-bold leading-tight text-gray-900">{poll.title}</h3>
+        <div className="flex-1">
+          <div className="flex items-center gap-2 mb-2">
+            <Identity 
+              address={poll.creatorAddress} 
+              chain={baseSepolia}
+              className="bg-transparent p-0 space-x-1"
+            >
+              <Avatar className="h-5 w-5" />
+              <Name className="text-xs font-medium text-gray-600 hover:text-blue-600" />
+            </Identity>
+          </div>
+          <h3 className="text-lg font-bold leading-tight text-gray-900">{poll.title}</h3>
+        </div>
         <div className="flex flex-col items-end gap-1">
-          <button 
-            onClick={handleViewProfile}
-            className="flex items-center gap-1 text-xs bg-blue-50 text-blue-600 px-2 py-1 rounded-full font-medium whitespace-nowrap ml-2 hover:bg-blue-100 hover:text-blue-700 transition-colors cursor-pointer"
-          >
-            <User size={12} />
-            <span>FID: {poll.creatorFid.toString()}</span>
-          </button>
           {hasVoted && (
             <span className="text-[10px] bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-medium">
               Voted
@@ -97,6 +100,10 @@ export default function PollCard({ poll, pollId, hasVoted = false }: PollCardPro
             />
           </>
         )}
+      </div>
+
+      <div className="mt-4 flex justify-center border-t border-gray-100 pt-3">
+        <ShareButton title={poll.title} />
       </div>
     </div>
   );
