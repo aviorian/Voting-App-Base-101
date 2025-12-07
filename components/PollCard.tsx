@@ -1,10 +1,9 @@
 "use client";
 import TransactionWrapper from './TransactionWrapper';
 import { CONTRACT_ADDRESS, CONTRACT_ABI } from '../lib/contract';
-import { useMiniKit } from "@coinbase/onchainkit/minikit";
-import { Avatar, Name, Identity } from '@coinbase/onchainkit/identity';
-import { base, baseSepolia } from 'wagmi/chains';
+import { useMiniKit } from '@coinbase/onchainkit/minikit';
 import ShareButton from './ShareButton';
+import CreatorBadge from './CreatorBadge';
 
 interface Poll {
   title: string;
@@ -35,14 +34,7 @@ export default function PollCard({ poll, pollId, hasVoted = false }: PollCardPro
       <div className="flex justify-between items-start mb-3">
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-2">
-            <Identity 
-              address={poll.creatorAddress} 
-              chain={baseSepolia}
-              className="bg-transparent p-0 space-x-1"
-            >
-              <Avatar className="h-5 w-5" />
-              <Name className="text-xs font-medium text-gray-600 hover:text-blue-600" />
-            </Identity>
+            <CreatorBadge fid={Number(poll.creatorFid)} />
           </div>
           <h3 className="text-lg font-bold leading-tight text-gray-900">{poll.title}</h3>
         </div>
