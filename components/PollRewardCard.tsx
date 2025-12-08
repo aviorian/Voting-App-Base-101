@@ -45,16 +45,20 @@ export default function PollRewardCard({ pollTitle, pollId }: PollRewardCardProp
             }];
           }}
           useNFTData={(contractAddress, tokenId) => {
-             // Manual override since we don't have API data yet
              return {
                 name: `${pollTitle} Badge`,
                 description: "Commemorative badge for voting",
-                imageUrl: "https://onchainkit.xyz/assets/onchainkit.png",
+                imageUrl: "/icon.png",
                 animationUrl: "",
                 mimeType: "image/png",
                 ownerAddress: undefined,
                 contractType: "ERC1155",
-                lastSoldPrice: undefined
+                lastSoldPrice: undefined,
+                price: { amount: "0", currency: "ETH", amountUSD: "0" },
+                mintFee: { amount: "0", currency: "ETH", amountUSD: "0" },
+                maxMintsPerWallet: 1,
+                isEligibleToMint: true,
+                creatorAddress: REWARD_CONTRACT_ADDRESS,
              }
           }}
         >
