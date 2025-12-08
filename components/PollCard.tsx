@@ -4,6 +4,10 @@ import { CONTRACT_ADDRESS, CONTRACT_ABI } from '../lib/contract';
 import { useMiniKit } from '@coinbase/onchainkit/minikit';
 import ShareButton from './ShareButton';
 import CreatorBadge from './CreatorBadge';
+import { pay } from '@base-org/account';
+import { Heart } from 'lucide-react';
+import VoteButtons from './VoteButtons';
+import PollRewardCard from './PollRewardCard';
 
 interface Poll {
   title: string;
@@ -31,6 +35,18 @@ export default function PollCard({ poll, pollId, hasVoted = false, onVoteSuccess
   const yesPercentage = totalVotes > 0 ? (yesVotes / totalVotes) * 100 : 0;
   const noPercentage = totalVotes > 0 ? (noVotes / totalVotes) * 100 : 0;
 
+  const handleSupport = async () => {
+    try {
+      await pay({
+        amount: '0.01',
+        to: poll.creatorAddress,
+        testnet: true,
+      });
+    } catch (error) {
+      console.error('Payment failed:', error);
+    }
+  };
+
   return (
     <div className={`p-6 border rounded-2xl shadow-sm bg-white mb-4 ${hasVoted ? 'border-blue-200 bg-blue-50/30' : 'border-gray-100'}`}>
       <div className="flex justify-between items-start mb-3">
@@ -41,6 +57,13 @@ export default function PollCard({ poll, pollId, hasVoted = false, onVoteSuccess
           <h3 className="text-lg font-bold leading-tight text-gray-900">{poll.title}</h3>
         </div>
         <div className="flex flex-col items-end gap-1">
+          <button 
+            onClick={handleSupport}
+            className="flex items-center gap-1 text-[10px] bg-pink-100 text-pink-700 px-2 py-1 rounded-full font-medium hover:bg-pink-200 transition-colors"
+          >
+            <Heart className="w-3 h-3 fill-current" />
+            Support
+          </button>
           {hasVoted && (
             <span className="text-[10px] bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-medium">
               Voted
@@ -70,35 +93,20 @@ export default function PollCard({ poll, pollId, hasVoted = false, onVoteSuccess
 
       <div className="grid grid-cols-2 gap-3">
         {hasVoted ? (
-          <div className="col-span-2 text-center py-2 text-sm text-gray-500 font-medium bg-gray-50 rounded-xl">
-            You have already voted on this poll
+          <div className="col-span-2">
+            <div className="text-center py-2 text-sm text-gray-500 font-medium bg-gray-50 rounded-xl mb-4">
+              You have already voted on this poll
+            </div>
+            <PollRewardCard pollTitle={poll.title} pollId={pollId} />
           </div>
         ) : (
-          <>
-            <TransactionWrapper
-              mode="global"
-              chainId={84532}
-              contractAddress={CONTRACT_ADDRESS as `0x${string}`}
-              abi={CONTRACT_ABI}
-              functionName="vote"
-              args={[BigInt(pollId), true, BigInt(context?.user?.fid ?? 0)]}
-              label="Vote Yes"
-              onSuccess={onVoteSuccess}
-              className="w-full bg-white border border-green-500 text-green-600 hover:bg-green-50 font-bold py-2 rounded-xl transition-colors"
+          <div className="col-span-2">
+            <VoteButtons 
+              pollId={pollId} 
+              userFid={context?.user?.fid ?? 0} 
+              onVoteSuccess={onVoteSuccess} 
             />
-
-            <TransactionWrapper
-              mode="global"
-              chainId={84532}
-              contractAddress={CONTRACT_ADDRESS as `0x${string}`}
-              abi={CONTRACT_ABI}
-              functionName="vote"
-              args={[BigInt(pollId), false, BigInt(context?.user?.fid ?? 0)]}
-              label="Vote No"
-              onSuccess={onVoteSuccess}
-              className="w-full bg-white border border-red-500 text-red-600 hover:bg-red-50 font-bold py-2 rounded-xl transition-colors"
-            />
-          </>
+          </div>
         )}
       </div>
 
