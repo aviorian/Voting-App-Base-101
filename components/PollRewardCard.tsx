@@ -95,7 +95,7 @@ export default function PollRewardCard({ pollTitle, pollId }: PollRewardCardProp
                      return {
                         name: `${pollTitle} Badge`,
                         description: "Commemorative badge for voting",
-                        imageUrl: "/icon.png",
+                        imageUrl: "/blue-icon.png",
                         animationUrl: "",
                         mimeType: "image/png",
                         ownerAddress: undefined,
