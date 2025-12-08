@@ -7,7 +7,7 @@ import { NFTMedia } from '@coinbase/onchainkit/nft/view';
 import { NFTCollectionTitle, NFTMintButton } from '@coinbase/onchainkit/nft/mint';
 import { encodeFunctionData, parseAbi } from 'viem';
 import { useAccount, useReadContract } from 'wagmi';
-import { CheckCircle, ExternalLink, ChevronDown, ChevronUp, Gift } from 'lucide-react';
+import { CheckCircle, ChevronDown, ChevronUp, Gift } from 'lucide-react';
 
 interface PollRewardCardProps {
   pollTitle: string;
@@ -66,20 +66,11 @@ export default function PollRewardCard({ pollTitle, pollId }: PollRewardCardProp
             <div className="text-center mt-4">
                 <div className="relative w-32 h-32 mx-auto mb-4 rounded-xl overflow-hidden border-2 border-green-200 shadow-sm">
                   <img 
-                    src="/icon.png" 
+                    src="/blue.icon.png" 
                     alt="Badge" 
                     className="w-full h-full object-cover"
                   />
                 </div>
-                <a 
-                  href={`https://testnets.opensea.io/assets/base-sepolia/${REWARD_CONTRACT_ADDRESS}/${pollId}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 text-xs font-medium text-green-700 hover:text-green-800 hover:underline"
-                >
-                  View on OpenSea
-                  <ExternalLink className="w-3 h-3" />
-                </a>
             </div>
           ) : (
             <div className="mt-4 rounded-xl overflow-hidden border border-purple-200 shadow-sm bg-white">
