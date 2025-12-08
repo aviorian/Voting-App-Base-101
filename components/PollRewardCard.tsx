@@ -66,7 +66,7 @@ export default function PollRewardCard({ pollTitle, pollId }: PollRewardCardProp
             <div className="text-center mt-4">
                 <div className="relative w-32 h-32 mx-auto mb-4 rounded-xl overflow-hidden border-2 border-green-200 shadow-sm">
                   <img 
-                    src="/blue.icon.png" 
+                    src="/blue-icon.png" 
                     alt="Badge" 
                     className="w-full h-full object-cover"
                   />
