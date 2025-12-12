@@ -76,16 +76,16 @@ export default function PollCard({ poll, pollId, hasVoted = false, onVoteSuccess
       
       <div className="mb-6 space-y-2">
         <div className="flex justify-between text-sm font-medium">
-          <span className="text-green-600">{yesVotes} Yes ({Math.round(yesPercentage)}%)</span>
-          <span className="text-red-600">{noVotes} No ({Math.round(noPercentage)}%)</span>
+          <span className="text-blue-600">{yesVotes} Yes ({Math.round(yesPercentage)}%)</span>
+          <span className="text-orange-600">{noVotes} No ({Math.round(noPercentage)}%)</span>
         </div>
         <div className="h-3 bg-gray-100 rounded-full overflow-hidden flex">
           <div 
-            className="h-full bg-green-500 transition-all duration-500"
+            className="h-full bg-blue-600 transition-all duration-500"
             style={{ width: `${yesPercentage}%` }}
           />
           <div 
-            className="h-full bg-red-500 transition-all duration-500"
+            className="h-full bg-orange-500 transition-all duration-500"
             style={{ width: `${noPercentage}%` }}
           />
         </div>

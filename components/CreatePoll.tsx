@@ -13,6 +13,16 @@ export default function CreatePoll() {
   const { context } = useMiniKit();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const allowedFids = process.env.NEXT_PUBLIC_ALLOWED_FIDS?.split(',').map(fid => fid.trim());
+
+  if (allowedFids && !allowedFids.includes(context?.user.fid.toString() || "0")) {
+    return (
+      <div className="p-6 border border-red-200 rounded-2xl shadow-sm bg-red-50 text-center">
+        <h2 className="text-xl font-bold mb-4 text-red-700">Access Denied</h2>
+        <p className="text-red-600">You do not have permission to create polls.</p>
+      </div>
+    );
+  }
 
   const handleStatus = (status: any) => {
     console.log(status);
